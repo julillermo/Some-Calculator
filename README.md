@@ -1,34 +1,17 @@
-# some-calculator
+# some Calculator
 
-An Electron application with React and TypeScript
+A simple calculator application meant for personal learning of [Electron.js](https://www.electronjs.org/). This project buils on the starting point provided by [electron-vite](https://electron-vite.org/).
 
-## Recommended IDE Setup
+The project is intended to gradually gain more
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## Features as
 
-## Project Setup
+- [x] Basic renderer-side only calculator using React.js
 
-### Install
+## Planned / Potential Features
 
-```bash
-$ pnpm install
-```
-
-### Development
-
-```bash
-$ pnpm dev
-```
-
-### Build
-
-```bash
-# For windows
-$ pnpm build:win
-
-# For macOS
-$ pnpm build:mac
-
-# For Linux
-$ pnpm build:linux
-```
+- [ ] UI overhaul with TailwindCSS (Will still have to learn this)
+- [ ] Set up the Electron IPC workflow that I stumbled on while working on [template-electron-forge-vite-react-ts](https://github.com/julillermo/template-electron-forge-vite-react-ts)
+- [ ] Light Mode / Dark Mode
+- [ ] Feature to render latex expressions
+- [ ] Feature to open plain text files to read latex expressions and perform basic calculations.
