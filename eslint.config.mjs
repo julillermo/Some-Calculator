@@ -32,6 +32,12 @@ export default tseslint.config(
           varsIgnorePattern: '^_',
           caughtErrorsIgnorePattern: '^_'
         }
+      ],
+      'prettier/prettier': [
+        'error',
+        {
+          endOfLine: 'auto'
+        }
       ]
     }
   },

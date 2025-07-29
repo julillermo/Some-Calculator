@@ -1,10 +1,10 @@
 {
   "name": "some-calculator",
   "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "description": "A calculator application built on electron-vite for learning purposes",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "TulioG_Projects",
+  "homepage": "https://github.com/julillermo/Some-Calculator",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
@@ -31,6 +31,7 @@
     "@types/node": "^22.16.5",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "@vanilla-extract/vite-plugin": "^5.1.1",
     "@vitejs/plugin-react": "^4.7.0",
     "electron": "^37.2.3",
     "electron-builder": "^25.1.8",

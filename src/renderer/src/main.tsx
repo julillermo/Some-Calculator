@@ -1,9 +1,10 @@
-import './assets/main.css'
-
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App'
-const { versions } = window
+
+const {
+  process: { versions }
+} = window.electron
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -11,6 +12,6 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>
 )
 
-console.log('node version:', versions.node())
-console.log('chrome version:', versions.chrome())
-console.log('electron version:', versions.electron())
+console.log('node version:', versions.node)
+console.log('chrome version:', versions.chrome)
+console.log('electron version:', versions.electron)

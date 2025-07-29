@@ -1,6 +1,7 @@
 import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
 
 export default defineConfig({
   main: {
@@ -18,6 +19,6 @@ export default defineConfig({
     server: {
       port: 63210
     },
-    plugins: [react()]
+    plugins: [react(), vanillaExtractPlugin()]
   }
 })
