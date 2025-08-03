@@ -1,7 +1,14 @@
 {
   "name": "some-calculator",
-  "version": "1.0.0",
-  "description": "A calculator application built on electron-vite for learning purposes",
+  "version": "0.1.0",
+  "description": "A calculator application built on electron-vite, and made for learning purposes",
+  "keywords": [
+    "electron",
+    "vitejs",
+    "react",
+    "aria",
+    "calculator"
+  ],
   "main": "./out/main/index.js",
   "author": "TulioG_Projects",
   "homepage": "https://github.com/julillermo/Some-Calculator",
@@ -22,13 +29,17 @@
   },
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.2",
-    "@electron-toolkit/utils": "^4.0.0"
+    "@electron-toolkit/utils": "^4.0.0",
+    "@vanilla-extract/css-utils": "^0.1.6",
+    "@vanilla-extract/dynamic": "^2.1.5",
+    "open-color": "^1.9.1",
+    "react-aria-components": "^1.11.0"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.0.0",
     "@electron-toolkit/tsconfig": "^1.0.1",
-    "@types/node": "^22.16.5",
+    "@types/node": "^20.14.15",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@vanilla-extract/vite-plugin": "^5.1.1",
