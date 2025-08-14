@@ -20,6 +20,10 @@ export function removeChar(inputString: string, char: string): string {
   return inputString.split(char).join('');
 }
 
+export function removeLastChar<T extends string>(inputString: T): T {
+  return inputString.slice(0, inputString.length - 1) as T;
+}
+
 export function checkStringForDecimal(inputString: string): boolean {
   const matchRes = inputString.match(/\./g);
   return matchRes !== null && matchRes.length > 0;

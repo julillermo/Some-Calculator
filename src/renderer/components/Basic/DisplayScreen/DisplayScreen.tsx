@@ -52,5 +52,5 @@ type DisplayScreenBottomProps = {
 const DisplayScreenBottom = ({
   value
 }: DisplayScreenBottomProps): ReactNode => {
-  return <TextArea className={displayScreenBottom} value={value} />;
+  return <TextArea className={displayScreenBottom} value={value} readOnly />;
 };
