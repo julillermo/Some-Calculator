@@ -4,7 +4,14 @@
 
 ### Added
 
-- keyboard input for numbers, cancel (`c`-key), and delete (`Backspace`-key).
+- Keyboard input for numbers,
+  - `0-9` - input number values (both keyboard number pad and top row)
+  - `c` - clear the display
+  - `Backspace` - backward delete
+- Honor the text cursor placement for
+  - `Backspace` key (delete on Mac),
+  - `Delete` key,
+  - `0-9` keyboard number inputs and on screen key pad grid inputs.
 
 <!-- ### Changed -->
 

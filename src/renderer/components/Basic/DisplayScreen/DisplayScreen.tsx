@@ -1,3 +1,4 @@
+import { assignInlineVars } from '@vanilla-extract/dynamic';
 import { ReactNode } from 'react';
 import { TextArea } from 'react-aria-components';
 import {
@@ -6,15 +7,16 @@ import {
   displayScreenTop,
   heightVar
 } from './DisplayScreen.css';
-import { assignInlineVars } from '@vanilla-extract/dynamic';
 
 type DisplayScreenProps = {
   displayValue: string;
   height: number | `${number}px`;
+  bottomScreenRef?: React.RefObject<HTMLTextAreaElement | null>;
 };
 export const DisplayScreen = ({
   displayValue,
-  height
+  height,
+  bottomScreenRef
 }: DisplayScreenProps): ReactNode => {
   const heightString = typeof height === 'number' ? height.toString() : height;
   return (
@@ -26,7 +28,7 @@ export const DisplayScreen = ({
         displayValue={displayValue}
         className={displayScreenTop}
       />
-      <DisplayScreenBottom value={displayValue} />
+      <DisplayScreenBottom textAreaRef={bottomScreenRef} value={displayValue} />
     </div>
   );
 };
@@ -48,9 +50,13 @@ const DisplayScreenTop = ({
 
 type DisplayScreenBottomProps = {
   value: string;
+  textAreaRef?: React.RefObject<HTMLTextAreaElement | null>;
 };
 const DisplayScreenBottom = ({
-  value
+  value,
+  textAreaRef
 }: DisplayScreenBottomProps): ReactNode => {
-  return <TextArea className={displayScreenBottom} value={value} readOnly />;
+  return (
+    <TextArea ref={textAreaRef} className={displayScreenBottom} value={value} />
+  );
 };

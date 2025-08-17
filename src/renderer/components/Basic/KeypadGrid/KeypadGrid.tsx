@@ -1,6 +1,6 @@
 import { displayValueString } from '@renderer/types';
 import { getAriaLabel } from '@renderer/utils/ariaUtils';
-import { handleNumpadInput } from '@renderer/utils/commonStateLogic';
+import { getNumPadUpdatedDispalyValue } from '@renderer/utils/interactionLogic';
 import {
   BASIC_NUMBER_PAD_LABELS,
   BASIC_NUMBER_PAD_LABELS_ARIA,
@@ -17,11 +17,11 @@ import {
 import { removeLastChar } from '@renderer/utils/stringUtils';
 
 type BasicKeypadGridProps = {
-  displayValue: displayValueString;
+  displayValueString: displayValueString;
   onDisplayValueChange: (args: displayValueString) => void;
 };
 export const BasicKeypadGrid = ({
-  displayValue,
+  displayValueString,
   onDisplayValueChange
 }: BasicKeypadGridProps): ReactNode => {
   const handleClearDisplayValue = (): void => {
@@ -29,13 +29,13 @@ export const BasicKeypadGrid = ({
   };
 
   const handleDelete = (): void => {
-    onDisplayValueChange(removeLastChar(displayValue));
+    onDisplayValueChange(removeLastChar(displayValueString));
   };
 
   return (
     <div className={basicKeypadGrid}>
       <BasicNumberPad
-        displayValue={displayValue}
+        displayValueString={displayValueString}
         onDisplayValueChange={onDisplayValueChange}
       />
       <BasicOperationsTray
@@ -47,11 +47,11 @@ export const BasicKeypadGrid = ({
 };
 
 type BasicNumberPadArgs = {
-  displayValue: displayValueString;
+  displayValueString: displayValueString;
   onDisplayValueChange: (args: displayValueString) => void;
 };
 const BasicNumberPad = ({
-  displayValue,
+  displayValueString,
   onDisplayValueChange
 }: BasicNumberPadArgs): ReactNode => {
   return (
@@ -65,11 +65,12 @@ const BasicNumberPad = ({
           <Button
             key={`${index}-${label}-number-pad-button`}
             onClick={() =>
-              handleNumpadInput({
-                numpadInput: label,
-                displayValue,
-                setDisplayValueFn: onDisplayValueChange
-              })
+              onDisplayValueChange(
+                getNumPadUpdatedDispalyValue({
+                  numpadInput: label,
+                  displayValueString
+                })
+              )
             }
             aria-label={ariaLabel}
             style={{ fontSize: 24 }}

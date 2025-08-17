@@ -24,6 +24,25 @@ export function removeLastChar<T extends string>(inputString: T): T {
   return inputString.slice(0, inputString.length - 1) as T;
 }
 
+export function removeCharByIndex<T extends string>(
+  inputString: T,
+  index: number | undefined
+): T {
+  const removeCharByKnownIndex = function <T extends string>(
+    inputString: T,
+    index: number
+  ): T {
+    const firstHalf = inputString.slice(0, index - 1);
+    // const charAtIndex = inputString[index];
+    const secondHalf = inputString.slice(index, inputString.length);
+    return (firstHalf + secondHalf) as T;
+  };
+
+  return index !== undefined
+    ? removeCharByKnownIndex(inputString, index)
+    : inputString;
+}
+
 export function checkStringForDecimal(inputString: string): boolean {
   const matchRes = inputString.match(/\./g);
   return matchRes !== null && matchRes.length > 0;
