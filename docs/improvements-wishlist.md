@@ -1,14 +1,14 @@
-## Potential improvements wishlist
+# Potential improvements wishlist
 
 _Given that the project is mainly for learning purposes, these are just my broad ideas that I can potentially incorporate in the future_
 
-### Styling / UI :
+## Styling / UI :
 
 - [ ] Light Mode / Dark Mode
 - [ ] UI Styling mimicking [neobrutalism](https://www.neobrutalism.dev/)
 - [ ] Double check and improve ARIA functionality.
 
-### Features / Functionality :
+## Features / Functionality :
 
 - [ ] Feature to render latex expressions
 - [ ] Feature to open plain text files to read latex expressions and perform basic calculations.
@@ -19,7 +19,7 @@ _Given that the project is mainly for learning purposes, these are just my broad
   - [ ] `Backspace` key (delete key for Mac)
   - [ ] `Delete` key
 
-### Development Tasks :
+## Development Tasks :
 
 - [ ] Set up the Electron IPC workflow that I stumbled on while working on [template-electron-forge-vite-react-ts](https://github.com/julillermo/template-electron-forge-vite-react-ts)
 - [ ] Test cases using Vitest and Stories/Storybook.

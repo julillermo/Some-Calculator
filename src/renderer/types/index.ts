@@ -1,8 +1,8 @@
-export type displayValueString = '' | '.' | `${number}` | `${number}.${number}`;
+export type DisplayValueString = '' | '.' | `${number}` | `${number}.${number}`;
 
 export function isDisplayValueString(
   inputString: string
-): inputString is displayValueString {
+): inputString is DisplayValueString {
   const parsedFloat = parseFloat(inputString);
   return !isNaN(parsedFloat) || inputString === '.';
 }

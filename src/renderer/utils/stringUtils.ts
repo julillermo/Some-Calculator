@@ -1,4 +1,4 @@
-import { displayValueString } from '@renderer/types';
+import { DisplayValueString } from '@renderer/types';
 
 export function countDigitsInString(stringToCheck: string): number {
   const matchedDigits = stringToCheck
@@ -9,10 +9,10 @@ export function countDigitsInString(stringToCheck: string): number {
 }
 
 export function appendToDisplayValue(
-  currentString: displayValueString,
-  appendedString: displayValueString
-): displayValueString {
-  const outputString = (currentString + appendedString) as displayValueString;
+  currentString: DisplayValueString,
+  appendedString: DisplayValueString
+): DisplayValueString {
+  const outputString = (currentString + appendedString) as DisplayValueString;
   return outputString;
 }
 
@@ -82,18 +82,18 @@ function getNumberFromString(inputString: string): number | null {
   return !isNaN(floatValue) ? floatValue : null;
 }
 
-export function formatDisplayValue(inputString: string): displayValueString {
+export function formatDisplayValue(inputString: string): DisplayValueString {
   const [wholeNumberDigits, decimalDigits] = inputString.split('.');
   const commaFormattedWholeNumber = insertCharEvery(wholeNumberDigits, ',', 3);
   const joinChar = checkStringForDecimal(inputString) ? '.' : '';
 
   return [commaFormattedWholeNumber, decimalDigits].join(
     joinChar
-  ) as displayValueString;
+  ) as DisplayValueString;
 }
 
-export function getDisplayAndNumericalValue(displayValue: displayValueString): {
-  formattedDisplayValue: displayValueString;
+export function getDisplayAndNumericalValue(displayValue: DisplayValueString): {
+  formattedDisplayValue: DisplayValueString;
   numericalValue: number | null;
 } {
   const lastCharIsDecimalPoint = checkStringLastChar(displayValue, '.');

@@ -2,15 +2,16 @@ import { AppContainer, BasicKeypadGrid } from '@components/index';
 import { useEffect, useRef, useState } from 'react';
 import { calculatorLayout } from './App.css';
 import { DisplayScreen } from './components/Basic/DisplayScreen/DisplayScreen';
-import { displayValueString } from './types';
-import { getNumPadUpdatedDispalyValue } from './utils/interactionLogic';
+import { DisplayValueString } from './types';
 import { BASIC_NUMBER_PAD_LABELS } from './utils/constants';
+import {
+  getBackspaceUpdatedDisplayValue,
+  getNumPadUpdatedDispalyValue
+} from './utils/interactionLogic';
 import { isElementFocused } from './utils/sideEffects';
 import {
   countDigitsInString,
-  getDisplayAndNumericalValue,
-  removeCharByIndex,
-  removeLastChar
+  getDisplayAndNumericalValue
 } from './utils/stringUtils';
 
 function App(): React.JSX.Element {
@@ -18,8 +19,9 @@ function App(): React.JSX.Element {
 
   /* === State Values === */
   const [displayValueString, setDisplayValueString] =
-    useState<displayValueString>('');
+    useState<DisplayValueString>('');
   const [forcedRenderCount, setForcedRenderCount] = useState(0);
+  const [isDisplayScreenFocused, setIsDisplayScreenFocused] = useState(false);
 
   /* === Persistent Values === */
   const numericalValue = useRef<number | null>(null);
@@ -33,13 +35,35 @@ function App(): React.JSX.Element {
 
   /* === Side Effect Functions === */
   function captureKeyboardInputEffect() {
+    const btmDispScrRefCurrent = bottomDisplayScreenRef.current;
+
     const captureKeyPress = (event: KeyboardEvent): void => {
       keyboardInputRefValue.current = event.key;
       setForcedRenderCount((prev) => prev + 1);
     };
+    const onBottomDisplayScreenClick = (_event: PointerEvent): void => {
+      if (isElementFocused(bottomDisplayScreenRef.current)) {
+        setIsDisplayScreenFocused(true);
+      } else {
+        setIsDisplayScreenFocused(false);
+      }
+    };
+
     window.addEventListener('keydown', captureKeyPress);
+    if (btmDispScrRefCurrent) {
+      btmDispScrRefCurrent.addEventListener(
+        'click',
+        onBottomDisplayScreenClick
+      );
+    }
     return () => {
       window.removeEventListener('keydown', captureKeyPress);
+      if (btmDispScrRefCurrent) {
+        btmDispScrRefCurrent.removeEventListener(
+          'click',
+          onBottomDisplayScreenClick
+        );
+      }
     };
   } // []
   function processKeyboardInputEffect(): void {
@@ -55,16 +79,26 @@ function App(): React.JSX.Element {
       } else if (keyboardInputValue.toLowerCase() === 'c') {
         handleFormattedDisplayChange('');
       } else if (keyboardInputValue === 'Backspace') {
-        if (isElementFocused(bottomDisplayScreenRef.current)) {
-          const selectionValue = bottomDisplayScreenRef.current?.selectionStart;
-          if (selectionValue) {
-            handleFormattedDisplayChange(
-              removeCharByIndex(displayValueString, selectionValue)
-            );
-            textCursorSelectionPosRefValue.current = selectionValue - 1;
+        const selectionValue = bottomDisplayScreenRef.current?.selectionStart;
+        const isDisplayScreenFocused = isElementFocused(
+          bottomDisplayScreenRef.current
+        );
+
+        const {
+          updatedDisplayValueString,
+          updatedTextCursorSelectionPosition
+        } = getBackspaceUpdatedDisplayValue({
+          displayValueString,
+          selectionOptions: {
+            isDisplayScreenFocused,
+            selectionValue
           }
-        } else {
-          handleFormattedDisplayChange(removeLastChar(displayValueString));
+        });
+
+        handleFormattedDisplayChange(updatedDisplayValueString);
+        if (updatedTextCursorSelectionPosition !== undefined) {
+          textCursorSelectionPosRefValue.current =
+            updatedTextCursorSelectionPosition;
         }
       }
     }
@@ -96,7 +130,7 @@ function App(): React.JSX.Element {
 
   /* === Handler Functions === */
   const handleFormattedDisplayChange = (
-    displayValue: displayValueString
+    displayValue: DisplayValueString
   ): void => {
     const displayedDigitCount = countDigitsInString(displayValue);
     const { formattedDisplayValue, numericalValue: calcualtedNumValue } =
@@ -120,6 +154,9 @@ function App(): React.JSX.Element {
           />
           <BasicKeypadGrid
             displayValueString={displayValueString}
+            textCursorSelectionPosRefValue={textCursorSelectionPosRefValue}
+            bottomScreenRef={bottomDisplayScreenRef}
+            isDisplayScreenFocused={isDisplayScreenFocused}
             onDisplayValueChange={handleFormattedDisplayChange}
           />
         </div>

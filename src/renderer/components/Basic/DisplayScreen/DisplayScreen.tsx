@@ -11,7 +11,7 @@ import {
 type DisplayScreenProps = {
   displayValue: string;
   height: number | `${number}px`;
-  bottomScreenRef?: React.RefObject<HTMLTextAreaElement | null>;
+  bottomScreenRef: React.RefObject<HTMLTextAreaElement | null>;
 };
 export const DisplayScreen = ({
   displayValue,

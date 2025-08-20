@@ -1,12 +1,15 @@
-import { displayValueString } from '@renderer/types';
+import { DisplayValueString } from '@renderer/types';
 import { getAriaLabel } from '@renderer/utils/ariaUtils';
-import { getNumPadUpdatedDispalyValue } from '@renderer/utils/interactionLogic';
 import {
   BASIC_NUMBER_PAD_LABELS,
   BASIC_NUMBER_PAD_LABELS_ARIA,
   BASIC_OPERATIONS_TRAY_LABELS,
   BASIC_OPERATIONS_TRAY_LABELS_ARIA
 } from '@renderer/utils/constants';
+import {
+  getBackspaceUpdatedDisplayValue,
+  getNumPadUpdatedDispalyValue
+} from '@renderer/utils/interactionLogic';
 import { ReactNode } from 'react';
 import { Button } from 'react-aria-components';
 import {
@@ -14,14 +17,19 @@ import {
   basicNumberPad,
   basicOperationsTray
 } from './KeypadGrid.css';
-import { removeLastChar } from '@renderer/utils/stringUtils';
 
 type BasicKeypadGridProps = {
-  displayValueString: displayValueString;
-  onDisplayValueChange: (args: displayValueString) => void;
+  displayValueString: DisplayValueString;
+  textCursorSelectionPosRefValue: React.RefObject<number | null>;
+  bottomScreenRef: React.RefObject<HTMLTextAreaElement | null>;
+  isDisplayScreenFocused?: boolean;
+  onDisplayValueChange: (args: DisplayValueString) => void;
 };
 export const BasicKeypadGrid = ({
   displayValueString,
+  textCursorSelectionPosRefValue,
+  bottomScreenRef,
+  isDisplayScreenFocused = false,
   onDisplayValueChange
 }: BasicKeypadGridProps): ReactNode => {
   const handleClearDisplayValue = (): void => {
@@ -29,7 +37,23 @@ export const BasicKeypadGrid = ({
   };
 
   const handleDelete = (): void => {
-    onDisplayValueChange(removeLastChar(displayValueString));
+    const selectionValue = bottomScreenRef.current?.selectionStart;
+
+    const { updatedDisplayValueString, updatedTextCursorSelectionPosition } =
+      getBackspaceUpdatedDisplayValue({
+        displayValueString,
+        selectionOptions: {
+          isDisplayScreenFocused,
+          selectionValue
+        }
+      });
+
+    onDisplayValueChange(updatedDisplayValueString);
+    if (updatedTextCursorSelectionPosition !== undefined) {
+      textCursorSelectionPosRefValue.current =
+        updatedTextCursorSelectionPosition;
+      bottomScreenRef.current?.focus();
+    }
   };
 
   return (
@@ -47,8 +71,8 @@ export const BasicKeypadGrid = ({
 };
 
 type BasicNumberPadArgs = {
-  displayValueString: displayValueString;
-  onDisplayValueChange: (args: displayValueString) => void;
+  displayValueString: DisplayValueString;
+  onDisplayValueChange: (args: DisplayValueString) => void;
 };
 const BasicNumberPad = ({
   displayValueString,
