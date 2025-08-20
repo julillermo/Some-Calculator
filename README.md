@@ -1,15 +1,19 @@
 # some Calculator
 
-A simple calculator application meant for personal learning of [Electron.js](https://www.electronjs.org/). This project buils on the starting point provided by [electron-vite](https://electron-vite.org/).
+A simple calculator application meant for personal learning of [Electron.js](https://www.electronjs.org/). This project builds on the starting point provided by [electron-vite](https://electron-vite.org/).
 
 The project is intended to gradually gain more features over time to facilitate my learning of Node and Electron.
+
+For documentation files, kindly refer to:
+
+- [Changelog](/docs/changelog/CHANGELOG-v0.md)
+- [Improvements wishlist doc](/docs/improvements-wishlist.md)
+- [Known issues](/docs/known-issues.md)
 
 To build or run the application from source, refer to:
 
 - [Running the application in development from source](#running-the-application-in-development-from-source)
 - [Building the application](#building-the-application)
-
-For potential future improvements, kindly refer to [improvements wishlist doc](/docs/improvements-wishlist.md).
 
 ## Features as of latest v0.1.0
 

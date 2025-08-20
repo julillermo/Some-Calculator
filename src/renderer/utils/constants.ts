@@ -1,4 +1,4 @@
-import { AriaLabel } from './ariaUtils';
+import { AriaLabel } from '@renderer/utils/aria/getAriaLabel';
 
 export const BASIC_NUMBER_PAD_LABELS = [
   '7',

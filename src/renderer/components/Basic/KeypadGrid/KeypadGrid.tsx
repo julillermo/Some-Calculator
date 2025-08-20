@@ -1,5 +1,5 @@
 import { DisplayValueString } from '@renderer/types';
-import { getAriaLabel } from '@renderer/utils/ariaUtils';
+import { getAriaLabel } from '@renderer/utils/aria/getAriaLabel';
 import {
   BASIC_NUMBER_PAD_LABELS,
   BASIC_NUMBER_PAD_LABELS_ARIA,
@@ -7,9 +7,9 @@ import {
   BASIC_OPERATIONS_TRAY_LABELS_ARIA
 } from '@renderer/utils/constants';
 import {
-  getBackspaceUpdatedDisplayValue,
-  getNumPadUpdatedDispalyValue
-} from '@renderer/utils/interactionLogic';
+  getNumPadUpdatedDispalyValue,
+  getBackspaceUpdatedDisplayValue
+} from '@renderer/utils/interactions/updateDisplayValue/index';
 import { ReactNode } from 'react';
 import { Button } from 'react-aria-components';
 import {

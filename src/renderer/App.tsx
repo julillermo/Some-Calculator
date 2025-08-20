@@ -1,18 +1,19 @@
-import { AppContainer, BasicKeypadGrid } from '@components/index';
+import {
+  AppContainer,
+  BasicKeypadGrid,
+  DisplayScreen
+} from '@components/index';
 import { useEffect, useRef, useState } from 'react';
 import { calculatorLayout } from './App.css';
-import { DisplayScreen } from './components/Basic/DisplayScreen/DisplayScreen';
 import { DisplayValueString } from './types';
 import { BASIC_NUMBER_PAD_LABELS } from './utils/constants';
 import {
-  getBackspaceUpdatedDisplayValue,
-  getNumPadUpdatedDispalyValue
-} from './utils/interactionLogic';
+  getNumPadUpdatedDispalyValue,
+  getBackspaceUpdatedDisplayValue
+} from './utils/interactions/updateDisplayValue';
 import { isElementFocused } from './utils/sideEffects';
-import {
-  countDigitsInString,
-  getDisplayAndNumericalValue
-} from './utils/stringUtils';
+import { getDisplayAndNumericalValue } from './utils/string';
+import { countDigitsInString } from './utils/string';
 
 function App(): React.JSX.Element {
   // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
@@ -41,7 +42,7 @@ function App(): React.JSX.Element {
       keyboardInputRefValue.current = event.key;
       setForcedRenderCount((prev) => prev + 1);
     };
-    const onBottomDisplayScreenClick = (_event: PointerEvent): void => {
+    const onBottomDisplayScreenClick = (_event: MouseEvent): void => {
       if (isElementFocused(bottomDisplayScreenRef.current)) {
         setIsDisplayScreenFocused(true);
       } else {
