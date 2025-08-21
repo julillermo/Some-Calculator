@@ -37,12 +37,14 @@ export function removeCharByIndex<T extends string>(
     index: number
   ): T {
     const firstHalf = inputString.slice(0, index - 1);
-    // const charAtIndex = inputString[index];
+    // const charAtIndex = inputString[index - 1];
     const secondHalf = inputString.slice(index, inputString.length);
+
+    // console.log({ index, firstHalf, charAtIndex, secondHalf });
     return (firstHalf + secondHalf) as T;
   };
 
-  return index !== undefined
+  return index !== undefined && index > 0
     ? removeCharByKnownIndex(inputString, index)
     : inputString;
 }

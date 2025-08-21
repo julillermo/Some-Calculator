@@ -21,6 +21,7 @@ _Given that the project is mainly for learning purposes, these are just my broad
 
 ## Development Tasks :
 
+- [ ] Have a way to determine on the renderer-side whether an app is running on dev-mode. Likely pass the `is.dev` from `@electron-toolkit/utils` over IPC. Can be useful for only showing logs when in dev-mode.
 - [ ] Set up the Electron IPC workflow that I stumbled on while working on [template-electron-forge-vite-react-ts](https://github.com/julillermo/template-electron-forge-vite-react-ts)
 - [ ] Test cases using Vitest and Stories/Storybook.
 - [ ] Cover error scenarios.

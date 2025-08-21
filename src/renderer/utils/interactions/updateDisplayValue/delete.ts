@@ -1,34 +1,37 @@
 import { DisplayValueString } from '@renderer/types';
-import { removeLastChar, removeCharByIndex } from '@renderer/utils/string';
+import { removeCharByIndex } from '@renderer/utils/string';
 
-type GetBackspaceUpdatedDisplayValueProps = {
+type GetDeleteUpdatedDisplayValueProps = {
   displayValueString: DisplayValueString;
   selectionOptions: {
     isDisplayScreenFocused: boolean;
     selectionValue: number | undefined;
   };
 };
-type GetBackspaceUpdatedDisplayValueRes = {
+type GetDeleteUpdatedDisplayValueRes = {
   updatedDisplayValueString: DisplayValueString;
   updatedTextCursorSelectionPosition: number | undefined;
 };
-export function getBackspaceUpdatedDisplayValue({
+export function getDeleteUpdatedDisplayValue({
   displayValueString,
   selectionOptions: { isDisplayScreenFocused, selectionValue }
-}: GetBackspaceUpdatedDisplayValueProps): GetBackspaceUpdatedDisplayValueRes {
+}: GetDeleteUpdatedDisplayValueProps): GetDeleteUpdatedDisplayValueRes {
   let updatedDisplayValueString = displayValueString;
   let updatedTextCursorSelectionPosition = selectionValue;
+
+  console.log({
+    updatedDisplayValueString,
+    updatedTextCursorSelectionPosition
+  });
 
   if (isDisplayScreenFocused) {
     if (selectionValue !== undefined) {
       updatedDisplayValueString = removeCharByIndex(
         displayValueString,
-        selectionValue
+        selectionValue + 1
       );
-      updatedTextCursorSelectionPosition = selectionValue - 1;
+      updatedTextCursorSelectionPosition = selectionValue;
     }
-  } else {
-    updatedDisplayValueString = removeLastChar(displayValueString);
   }
 
   return {

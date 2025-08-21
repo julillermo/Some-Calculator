@@ -26,7 +26,7 @@ To build or run the application from source, refer to:
 - [ ] Honor text cursor placement:
   - [ ] Navigate the cursor position via the `<` and `>` key pad grid buttons.
   - [x] `Backspace` (Delete on Mac) - delete character on the left of the cursor
-  - [ ] `Delete` - delete character on the right of the cursor
+  - [x] `Delete` - delete character on the right of the cursor
   - [ ] `0-9` keys - number values get inserted at the text cursor position.
 
 ## Running the application in development from source:

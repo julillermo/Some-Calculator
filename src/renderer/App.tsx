@@ -9,9 +9,13 @@ import { DisplayValueString } from './types';
 import { BASIC_NUMBER_PAD_LABELS } from './utils/constants';
 import {
   getNumPadUpdatedDispalyValue,
-  getBackspaceUpdatedDisplayValue
+  getBackspaceUpdatedDisplayValue,
+  getDeleteUpdatedDisplayValue
 } from './utils/interactions/updateDisplayValue';
-import { isElementFocused } from './utils/sideEffects';
+import {
+  getBottomDisplayScreenDetails,
+  isElementFocused
+} from './utils/sideEffects';
 import { getDisplayAndNumericalValue } from './utils/string';
 import { countDigitsInString } from './utils/string';
 
@@ -39,6 +43,7 @@ function App(): React.JSX.Element {
     const btmDispScrRefCurrent = bottomDisplayScreenRef.current;
 
     const captureKeyPress = (event: KeyboardEvent): void => {
+      // console.log('event.key', event.key);
       keyboardInputRefValue.current = event.key;
       setForcedRenderCount((prev) => prev + 1);
     };
@@ -67,6 +72,7 @@ function App(): React.JSX.Element {
       }
     };
   } // []
+
   function processKeyboardInputEffect(): void {
     const keyboardInputValue = keyboardInputRefValue.current;
     if (keyboardInputValue) {
@@ -80,11 +86,8 @@ function App(): React.JSX.Element {
       } else if (keyboardInputValue.toLowerCase() === 'c') {
         handleFormattedDisplayChange('');
       } else if (keyboardInputValue === 'Backspace') {
-        const selectionValue = bottomDisplayScreenRef.current?.selectionStart;
-        const isDisplayScreenFocused = isElementFocused(
-          bottomDisplayScreenRef.current
-        );
-
+        const { selectionValue, isDisplayScreenFocused } =
+          getBottomDisplayScreenDetails(bottomDisplayScreenRef);
         const {
           updatedDisplayValueString,
           updatedTextCursorSelectionPosition
@@ -95,7 +98,24 @@ function App(): React.JSX.Element {
             selectionValue
           }
         });
-
+        handleFormattedDisplayChange(updatedDisplayValueString);
+        if (updatedTextCursorSelectionPosition !== undefined) {
+          textCursorSelectionPosRefValue.current =
+            updatedTextCursorSelectionPosition;
+        }
+      } else if (keyboardInputValue === 'Delete') {
+        const { selectionValue, isDisplayScreenFocused } =
+          getBottomDisplayScreenDetails(bottomDisplayScreenRef);
+        const {
+          updatedDisplayValueString,
+          updatedTextCursorSelectionPosition
+        } = getDeleteUpdatedDisplayValue({
+          displayValueString,
+          selectionOptions: {
+            isDisplayScreenFocused,
+            selectionValue
+          }
+        });
         handleFormattedDisplayChange(updatedDisplayValueString);
         if (updatedTextCursorSelectionPosition !== undefined) {
           textCursorSelectionPosRefValue.current =
@@ -104,6 +124,7 @@ function App(): React.JSX.Element {
       }
     }
   } // [forcedRenderCount]
+
   function displayRenderCleanupEffect(): void {
     const currentTextCursorPosition = textCursorSelectionPosRefValue.current;
     if (currentTextCursorPosition !== null) {
@@ -120,6 +141,7 @@ function App(): React.JSX.Element {
         commaAccountedCursorPos,
         commaAccountedCursorPos
       );
+      previousCommaCountValue.current = currentCommaCountValue.current;
     }
   } // [displayValue]
 

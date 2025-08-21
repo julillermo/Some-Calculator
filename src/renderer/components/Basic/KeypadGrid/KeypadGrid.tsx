@@ -120,7 +120,7 @@ const BasicOperationsTray = ({
       onClear();
       return;
     }
-    if (label === 'del') {
+    if (label === '⌫') {
       onDelete();
       return;
     }

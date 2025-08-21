@@ -1,1 +1,2 @@
-export { isElementFocused } from './isElementFocused';
+export { isElementFocused } from './htmlElement';
+export { getBottomDisplayScreenDetails } from './bottomDisplayScreen';
