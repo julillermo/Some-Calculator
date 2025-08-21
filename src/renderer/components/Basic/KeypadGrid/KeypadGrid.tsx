@@ -91,13 +91,36 @@ export const BasicKeypadGrid = ({
     bottomScreenRef.current?.focus();
     setIsDisplayScreenFocused(true);
   };
+  const handleNumPadClick = (numpadInput: string): void => {
+    const displayValueStringLength = displayValueString.length;
+    const selectionValue = textCursorSelectionPosRefValue.current;
+    if (selectionValue === null) {
+      textCursorSelectionPosRefValue.current = displayValueStringLength;
+      bottomScreenRef.current?.setSelectionRange(
+        displayValueStringLength,
+        displayValueStringLength
+      );
+    } else {
+      const { updatedDisplayValueString, updatedTextCursorSelectionPosition } =
+        getNumPadUpdatedDispalyValue({
+          numpadInput,
+          displayValueString,
+          selectionOptions: {
+            isDisplayScreenFocused,
+            selectionValue
+          }
+        });
+      onDisplayValueChange(updatedDisplayValueString);
+      if (updatedTextCursorSelectionPosition !== undefined) {
+        textCursorSelectionPosRefValue.current =
+          updatedTextCursorSelectionPosition;
+      }
+    }
+  };
 
   return (
     <div className={basicKeypadGrid}>
-      <BasicNumberPad
-        displayValueString={displayValueString}
-        onDisplayValueChange={onDisplayValueChange}
-      />
+      <BasicNumberPad onClick={handleNumPadClick} />
       <BasicOperationsTray
         onClear={handleClearDisplayValue}
         onBackspace={handleBackspace}
@@ -108,13 +131,9 @@ export const BasicKeypadGrid = ({
 };
 
 type BasicNumberPadArgs = {
-  displayValueString: DisplayValueString;
-  onDisplayValueChange: (args: DisplayValueString) => void;
+  onClick: (label: string) => void;
 };
-const BasicNumberPad = ({
-  displayValueString,
-  onDisplayValueChange
-}: BasicNumberPadArgs): ReactNode => {
+const BasicNumberPad = ({ onClick }: BasicNumberPadArgs): ReactNode => {
   return (
     <div className={basicNumberPad}>
       {BASIC_NUMBER_PAD_LABELS.map((label, index) => {
@@ -125,14 +144,7 @@ const BasicNumberPad = ({
         return (
           <Button
             key={`${index}-${label}-number-pad-button`}
-            onClick={() =>
-              onDisplayValueChange(
-                getNumPadUpdatedDispalyValue({
-                  numpadInput: label,
-                  displayValueString
-                })
-              )
-            }
+            onClick={() => onClick(label)}
             aria-label={ariaLabel}
             style={{ fontSize: 24 }}
           >

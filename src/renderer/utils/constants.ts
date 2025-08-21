@@ -31,3 +31,4 @@ export const BASIC_OPERATIONS_TRAY_LABELS_ARIA: AriaLabel[] = [
   { label: '⌫', ariaLabel: 'backspace' },
   { label: 'clr', ariaLabel: 'clear' }
 ];
+export const MAX_DISPLAYED_DIGIT = 12;

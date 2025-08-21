@@ -1,5 +1,5 @@
 import { DisplayValueString } from '@renderer/types';
-import { insertCharEvery, removeChar } from './modifyString';
+import { insertCharAtIndex, insertCharEvery, removeChar } from './modifyString';
 import { checkStringForDecimal, checkStringLastChar } from './checkString';
 import { getNumberFromString } from './readString';
 
@@ -9,6 +9,14 @@ export function appendToDisplayValue(
 ): DisplayValueString {
   const outputString = (currentString + appendedString) as DisplayValueString;
   return outputString;
+}
+
+export function insertInDisplayValue(
+  currentString: DisplayValueString,
+  insertString: DisplayValueString,
+  insertIndex: number
+): DisplayValueString {
+  return insertCharAtIndex(currentString, insertString, insertIndex);
 }
 
 export function formatDisplayValue(inputString: string): DisplayValueString {

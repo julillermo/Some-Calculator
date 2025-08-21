@@ -6,7 +6,10 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { calculatorLayout } from './App.css';
 import { DisplayValueString } from './types';
-import { BASIC_NUMBER_PAD_LABELS } from './utils/constants';
+import {
+  BASIC_NUMBER_PAD_LABELS,
+  MAX_DISPLAYED_DIGIT
+} from './utils/constants';
 import {
   getNumPadUpdatedDispalyValue,
   getBackspaceUpdatedDisplayValue,
@@ -82,19 +85,28 @@ function App(): React.JSX.Element {
 
   function processKeyboardInputEffect(): void {
     const keyboardInputValue = keyboardInputRefValue.current;
+    const { selectionValue, isDisplayScreenFocused } =
+      getBottomDisplayScreenDetails(bottomDisplayScreenRef);
+
     if (keyboardInputValue) {
       if (BASIC_NUMBER_PAD_LABELS.includes(keyboardInputValue)) {
-        handleFormattedDisplayChange(
-          getNumPadUpdatedDispalyValue({
-            numpadInput: keyboardInputValue,
-            displayValueString
-          })
-        );
-      } else if (keyboardInputValue.toLowerCase() === 'c') {
-        handleFormattedDisplayChange('');
+        const {
+          updatedDisplayValueString,
+          updatedTextCursorSelectionPosition
+        } = getNumPadUpdatedDispalyValue({
+          numpadInput: keyboardInputValue,
+          displayValueString,
+          selectionOptions: {
+            isDisplayScreenFocused,
+            selectionValue
+          }
+        });
+        handleFormattedDisplayChange(updatedDisplayValueString);
+        if (updatedTextCursorSelectionPosition !== undefined) {
+          textCursorSelectionPosRefValue.current =
+            updatedTextCursorSelectionPosition;
+        }
       } else if (keyboardInputValue === 'Backspace') {
-        const { selectionValue, isDisplayScreenFocused } =
-          getBottomDisplayScreenDetails(bottomDisplayScreenRef);
         const {
           updatedDisplayValueString,
           updatedTextCursorSelectionPosition
@@ -111,8 +123,6 @@ function App(): React.JSX.Element {
             updatedTextCursorSelectionPosition;
         }
       } else if (keyboardInputValue === 'Delete') {
-        const { selectionValue, isDisplayScreenFocused } =
-          getBottomDisplayScreenDetails(bottomDisplayScreenRef);
         const {
           updatedDisplayValueString,
           updatedTextCursorSelectionPosition
@@ -128,6 +138,8 @@ function App(): React.JSX.Element {
           textCursorSelectionPosRefValue.current =
             updatedTextCursorSelectionPosition;
         }
+      } else if (keyboardInputValue.toLowerCase() === 'c') {
+        handleFormattedDisplayChange('');
       }
     }
   } // [forcedRenderCount]
@@ -140,10 +152,21 @@ function App(): React.JSX.Element {
         currentTextCursorPositionLess1 > -1
           ? currentTextCursorPositionLess1
           : 0;
-      const commaAccountedCursorPos =
-        currentCommaCountValue.current < previousCommaCountValue.current
-          ? min0TextCursorPosition
-          : currentTextCursorPosition;
+      const currentTextCursorPositionPlus1 = currentTextCursorPosition + 1;
+      const maxTextCursorPosition =
+        currentTextCursorPositionPlus1 <= displayValueString.length
+          ? currentTextCursorPositionPlus1
+          : 0;
+
+      let commaAccountedCursorPos = currentTextCursorPosition;
+      if (currentCommaCountValue.current < previousCommaCountValue.current) {
+        commaAccountedCursorPos = min0TextCursorPosition;
+      } else if (
+        currentCommaCountValue.current > previousCommaCountValue.current
+      ) {
+        commaAccountedCursorPos = maxTextCursorPosition;
+      }
+
       bottomDisplayScreenRef.current?.setSelectionRange(
         commaAccountedCursorPos,
         commaAccountedCursorPos
@@ -153,10 +176,10 @@ function App(): React.JSX.Element {
   } // [displayValue]
 
   /* === Side Effect Calls === */
+  useEffect(displayRenderCleanupEffect, [displayValueString]);
   /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(captureKeyboardInputEffect, []);
   useEffect(processKeyboardInputEffect, [forcedRenderCount]);
-  useEffect(displayRenderCleanupEffect, [displayValueString]);
 
   /* === Handler Functions === */
   const handleFormattedDisplayChange = (
@@ -165,7 +188,7 @@ function App(): React.JSX.Element {
     const displayedDigitCount = countDigitsInString(displayValue);
     const { formattedDisplayValue, numericalValue: calcualtedNumValue } =
       getDisplayAndNumericalValue(displayValue);
-    if (displayedDigitCount <= 12) {
+    if (displayedDigitCount <= MAX_DISPLAYED_DIGIT) {
       setDisplayValueString(formattedDisplayValue);
       numericalValue.current = calcualtedNumValue;
       currentCommaCountValue.current =
@@ -178,7 +201,8 @@ function App(): React.JSX.Element {
       <AppContainer>
         <div className={calculatorLayout}>
           <DisplayScreen
-            displayValue={displayValueString}
+            topScreenValue={displayValueString}
+            bottomScreenValue={displayValueString}
             height={`150px`}
             bottomScreenRef={bottomDisplayScreenRef}
           />

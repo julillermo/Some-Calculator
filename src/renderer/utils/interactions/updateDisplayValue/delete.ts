@@ -19,11 +19,6 @@ export function getDeleteUpdatedDisplayValue({
   let updatedDisplayValueString = displayValueString;
   let updatedTextCursorSelectionPosition = selectionValue;
 
-  console.log({
-    updatedDisplayValueString,
-    updatedTextCursorSelectionPosition
-  });
-
   if (isDisplayScreenFocused) {
     if (selectionValue !== undefined) {
       updatedDisplayValueString = removeCharByIndex(

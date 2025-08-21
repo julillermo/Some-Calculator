@@ -1,3 +1,13 @@
+export function insertCharAtIndex<T extends string>(
+  inputString: T,
+  insertChar: string,
+  insertIndex: number
+): T {
+  const firstHalf = inputString.slice(0, insertIndex);
+  const secondHalf = inputString.slice(insertIndex, inputString.length);
+  return (firstHalf + insertChar + secondHalf) as T;
+}
+
 export function insertCharEvery(
   inputString: string,
   insertChar: string,

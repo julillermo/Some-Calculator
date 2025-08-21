@@ -2,7 +2,7 @@
 
 A simple calculator application meant for personal learning of [Electron.js](https://www.electronjs.org/). This project builds on the starting point provided by [electron-vite](https://electron-vite.org/).
 
-The project is intended to gradually gain more features over time to facilitate my learning of Node and Electron.
+The project is intended to gradually gain more features over time to facilitate my learning of Node, Electron, and general software development.
 
 For documentation files, kindly refer to:
 
@@ -12,22 +12,28 @@ For documentation files, kindly refer to:
 
 To build or run the application from source, refer to:
 
-- [Running the application in development from source](#running-the-application-in-development-from-source)
-- [Building the application](#building-the-application)
+- [Running the application in development-mode from source](#running-the-application-in-development-from-source)
+- [Building the application for your local machine](#building-the-application)
 
-## Add features as of latest v0.2.0-dev
+## Added features as of latest v0.2.0
 
 - [ ] Working functionality for the 4 basic math operations computed on chromium front-end only
 - [x] Respond to keyboard inputs.
-- [ ] Honor text cursor placement:
+- [x] Honor text cursor placement:
   - [x] Navigate the cursor position via the `<` and `>` key pad grid buttons.
   - [x] `Backspace` (Delete on Mac) - delete character on the left of the cursor
   - [x] `Delete` - delete character on the right of the cursor
-  - [ ] `0-9` keys - number values get inserted at the text cursor position.
+  - [x] `0-9` keys - number values get inserted at the text cursor position.
 
-## Planned updates for v0.3.0-dev
+## Planned updates for v0.3.0
 
 - [ ] UI Styling mimicking [neobrutalism](https://www.neobrutalism.dev/)
+- [ ] Light Mode / Dark Mode
+- [ ] Test cases using Vitest and Stories/Storybook
+
+## Planned updates for v0.4.0
+
+- [ ] General development flow for packaging to Windows, Mac, and Linux. (prefer to distribute via [flathub](https://flathub.org/))
 
 ## Running the application in development from source:
 

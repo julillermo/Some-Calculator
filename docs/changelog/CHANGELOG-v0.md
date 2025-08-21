@@ -17,7 +17,7 @@
 - Honor the text cursor placement for
   - `Backspace` key (delete on Mac),
   - `Delete` key,
-  <!-- - `0-9` keyboard number inputs and on screen key pad grid inputs. -->
+  - `0-9` keyboard number inputs place the input according the location of the text cursor
 - Move text cursor using the on-screen `<` and `>` buttons.
 
 ## v0.1.0

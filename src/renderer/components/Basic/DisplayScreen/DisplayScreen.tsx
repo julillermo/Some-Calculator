@@ -7,14 +7,17 @@ import {
   displayScreenTop,
   heightVar
 } from './DisplayScreen.css';
+import { DisplayValueString } from '@renderer/types';
 
 type DisplayScreenProps = {
-  displayValue: string;
+  topScreenValue: string;
+  bottomScreenValue: DisplayValueString;
   height: number | `${number}px`;
   bottomScreenRef: React.RefObject<HTMLTextAreaElement | null>;
 };
 export const DisplayScreen = ({
-  displayValue,
+  topScreenValue,
+  bottomScreenValue,
   height,
   bottomScreenRef
 }: DisplayScreenProps): ReactNode => {
@@ -24,18 +27,18 @@ export const DisplayScreen = ({
       className={displayScreenContainer}
       style={assignInlineVars({ [heightVar]: heightString })}
     >
-      <DisplayScreenTop
-        displayValue={displayValue}
-        className={displayScreenTop}
+      <DisplayScreenTop value={topScreenValue} className={displayScreenTop} />
+      <DisplayScreenBottom
+        textAreaRef={bottomScreenRef}
+        value={bottomScreenValue}
       />
-      <DisplayScreenBottom textAreaRef={bottomScreenRef} value={displayValue} />
     </div>
   );
 };
 
-type DisplayScreenTopProps = { displayValue: string; className?: string };
+type DisplayScreenTopProps = { value: string; className?: string };
 const DisplayScreenTop = ({
-  displayValue,
+  value,
   className
 }: DisplayScreenTopProps): ReactNode => {
   return (
@@ -43,7 +46,7 @@ const DisplayScreenTop = ({
       className={className}
       style={{ height: '10px', backgroundColor: 'var(--red-3)' }}
     >
-      {displayValue}
+      {value}
     </div>
   );
 };

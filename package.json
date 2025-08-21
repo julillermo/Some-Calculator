@@ -1,7 +1,7 @@
 {
   "name": "some-calculator",
   "version": "0.2.0-dev",
-  "description": "A calculator application built on electron-vite, and made for learning purposes",
+  "description": "A calculator application built on electron-vite, and made for personal learning purposes",
   "keywords": [
     "electron",
     "vitejs",

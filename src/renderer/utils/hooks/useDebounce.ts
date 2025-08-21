@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react';
 
-export const useDebounce = <T>(value: T, delay = 300): T | null => {
+export const useDebounce = <T extends string>(
+  value: T,
+  delay = 300
+): T | null => {
   const valueRef = useRef<T>(null);
   const timeoutRef = useRef<NodeJS.Timeout>(null);
 

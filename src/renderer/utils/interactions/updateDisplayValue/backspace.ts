@@ -18,6 +18,7 @@ export function getBackspaceUpdatedDisplayValue({
 }: GetBackspaceUpdatedDisplayValueProps): GetBackspaceUpdatedDisplayValueRes {
   let updatedDisplayValueString = displayValueString;
   let updatedTextCursorSelectionPosition = selectionValue;
+  const textCursorAdjustment = selectionValue === 0 ? 0 : -1;
 
   if (isDisplayScreenFocused) {
     if (selectionValue !== undefined) {
@@ -25,7 +26,8 @@ export function getBackspaceUpdatedDisplayValue({
         displayValueString,
         selectionValue
       );
-      updatedTextCursorSelectionPosition = selectionValue - 1;
+      updatedTextCursorSelectionPosition =
+        selectionValue + textCursorAdjustment;
     }
   } else {
     updatedDisplayValueString = removeLastChar(displayValueString);
