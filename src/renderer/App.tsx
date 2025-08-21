@@ -47,15 +47,21 @@ function App(): React.JSX.Element {
       keyboardInputRefValue.current = event.key;
       setForcedRenderCount((prev) => prev + 1);
     };
-    const onBottomDisplayScreenClick = (_event: MouseEvent): void => {
+    const onBottomDisplayScreenClick = (event: MouseEvent): void => {
+      event.stopPropagation();
       if (isElementFocused(bottomDisplayScreenRef.current)) {
         setIsDisplayScreenFocused(true);
-      } else {
-        setIsDisplayScreenFocused(false);
+        textCursorSelectionPosRefValue.current =
+          bottomDisplayScreenRef.current?.selectionStart ?? 0;
       }
+    };
+    const onClickOutsideBottomDisplay = (_event: MouseEvent): void => {
+      setIsDisplayScreenFocused(false);
+      textCursorSelectionPosRefValue.current = displayValueString.length;
     };
 
     window.addEventListener('keydown', captureKeyPress);
+    window.addEventListener('click', onClickOutsideBottomDisplay);
     if (btmDispScrRefCurrent) {
       btmDispScrRefCurrent.addEventListener(
         'click',
@@ -64,6 +70,7 @@ function App(): React.JSX.Element {
     }
     return () => {
       window.removeEventListener('keydown', captureKeyPress);
+      window.removeEventListener('click', onClickOutsideBottomDisplay);
       if (btmDispScrRefCurrent) {
         btmDispScrRefCurrent.removeEventListener(
           'click',
@@ -146,8 +153,8 @@ function App(): React.JSX.Element {
   } // [displayValue]
 
   /* === Side Effect Calls === */
+  /* eslint-disable react-hooks/exhaustive-deps */
   useEffect(captureKeyboardInputEffect, []);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(processKeyboardInputEffect, [forcedRenderCount]);
   useEffect(displayRenderCleanupEffect, [displayValueString]);
 
@@ -180,6 +187,7 @@ function App(): React.JSX.Element {
             textCursorSelectionPosRefValue={textCursorSelectionPosRefValue}
             bottomScreenRef={bottomDisplayScreenRef}
             isDisplayScreenFocused={isDisplayScreenFocused}
+            setIsDisplayScreenFocused={setIsDisplayScreenFocused}
             onDisplayValueChange={handleFormattedDisplayChange}
           />
         </div>

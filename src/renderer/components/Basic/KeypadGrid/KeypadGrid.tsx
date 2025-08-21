@@ -7,8 +7,8 @@ import {
   BASIC_OPERATIONS_TRAY_LABELS_ARIA
 } from '@renderer/utils/constants';
 import {
-  getNumPadUpdatedDispalyValue,
-  getBackspaceUpdatedDisplayValue
+  getBackspaceUpdatedDisplayValue,
+  getNumPadUpdatedDispalyValue
 } from '@renderer/utils/interactions/updateDisplayValue/index';
 import { ReactNode } from 'react';
 import { Button } from 'react-aria-components';
@@ -22,7 +22,8 @@ type BasicKeypadGridProps = {
   displayValueString: DisplayValueString;
   textCursorSelectionPosRefValue: React.RefObject<number | null>;
   bottomScreenRef: React.RefObject<HTMLTextAreaElement | null>;
-  isDisplayScreenFocused?: boolean;
+  isDisplayScreenFocused: boolean;
+  setIsDisplayScreenFocused: (args: boolean) => void;
   onDisplayValueChange: (args: DisplayValueString) => void;
 };
 export const BasicKeypadGrid = ({
@@ -30,15 +31,15 @@ export const BasicKeypadGrid = ({
   textCursorSelectionPosRefValue,
   bottomScreenRef,
   isDisplayScreenFocused = false,
+  setIsDisplayScreenFocused,
   onDisplayValueChange
 }: BasicKeypadGridProps): ReactNode => {
+  /* === HandlerFunctions */
   const handleClearDisplayValue = (): void => {
     onDisplayValueChange('');
   };
-
-  const handleDelete = (): void => {
+  const handleBackspace = (): void => {
     const selectionValue = bottomScreenRef.current?.selectionStart;
-
     const { updatedDisplayValueString, updatedTextCursorSelectionPosition } =
       getBackspaceUpdatedDisplayValue({
         displayValueString,
@@ -55,6 +56,41 @@ export const BasicKeypadGrid = ({
       bottomScreenRef.current?.focus();
     }
   };
+  const handleMovetextCursor = (moveStep: number): void => {
+    const displayValueStringLength = displayValueString.length;
+    const selectionValue = textCursorSelectionPosRefValue.current;
+    const cursorAtFarthestLeft = selectionValue === 0;
+    const cursorAtFarthestRight = selectionValue === displayValueStringLength;
+
+    if (selectionValue === null) {
+      textCursorSelectionPosRefValue.current = displayValueStringLength;
+      bottomScreenRef.current?.setSelectionRange(
+        displayValueStringLength,
+        displayValueStringLength
+      );
+    } else {
+      const cursorIsWithinBounds =
+        selectionValue >= 0 && selectionValue <= displayValueStringLength;
+      if (cursorIsWithinBounds) {
+        let adjustedMoveStep = moveStep;
+        if (cursorAtFarthestLeft && moveStep < 0) {
+          adjustedMoveStep = 0;
+        } else if (cursorAtFarthestRight && moveStep > 0) {
+          adjustedMoveStep = 0;
+        }
+        const adjustedSelectionValue = selectionValue + adjustedMoveStep;
+
+        textCursorSelectionPosRefValue.current = adjustedSelectionValue;
+        bottomScreenRef.current?.setSelectionRange(
+          adjustedSelectionValue,
+          adjustedSelectionValue
+        );
+      }
+    }
+
+    bottomScreenRef.current?.focus();
+    setIsDisplayScreenFocused(true);
+  };
 
   return (
     <div className={basicKeypadGrid}>
@@ -64,7 +100,8 @@ export const BasicKeypadGrid = ({
       />
       <BasicOperationsTray
         onClear={handleClearDisplayValue}
-        onDelete={handleDelete}
+        onBackspace={handleBackspace}
+        onMoveTextCursor={handleMovetextCursor}
       />
     </div>
   );
@@ -108,20 +145,27 @@ const BasicNumberPad = ({
 };
 
 type BasicOperationsTrayProps = {
-  onDelete: () => void;
+  onBackspace: () => void;
   onClear: () => void;
+  onMoveTextCursor: (moveStep: number) => void;
 };
 const BasicOperationsTray = ({
-  onDelete,
-  onClear
+  onBackspace,
+  onClear,
+  onMoveTextCursor
 }: BasicOperationsTrayProps): ReactNode => {
   const handleClick = (label: string): void => {
     if (label === 'clr') {
       onClear();
       return;
-    }
-    if (label === '⌫') {
-      onDelete();
+    } else if (label === '⌫') {
+      onBackspace();
+      return;
+    } else if (label === '←') {
+      onMoveTextCursor(-1);
+      return;
+    } else if (label === '→') {
+      onMoveTextCursor(1);
       return;
     }
   };

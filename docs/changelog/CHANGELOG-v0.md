@@ -1,5 +1,11 @@
 # Changelog
 
+<!-- ## [version] -->
+<!-- ### Added -->
+<!-- ### Changed -->
+<!-- ### Bugs Fixed -->
+<!-- ### Notes -->
+
 ## v0.2.0
 
 ### Added
@@ -11,13 +17,8 @@
 - Honor the text cursor placement for
   - `Backspace` key (delete on Mac),
   - `Delete` key,
-  - `0-9` keyboard number inputs and on screen key pad grid inputs.
-
-<!-- ### Changed -->
-
-<!-- ### Fixed -->
-
-<!-- ### Migration notes -->
+  <!-- - `0-9` keyboard number inputs and on screen key pad grid inputs. -->
+- Move text cursor using the on-screen `<` and `>` buttons.
 
 ## v0.1.0
 
@@ -25,9 +26,3 @@
 
 - Base calculator with working display and numpad input (via mouse click only).
 - Formatting of numbers to have proper comma separation before being displayed.
-
-<!-- ### Changed -->
-
-<!-- ### Fixed -->
-
-<!-- ### Migration notes -->

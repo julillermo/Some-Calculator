@@ -7,7 +7,7 @@ The project is intended to gradually gain more features over time to facilitate 
 For documentation files, kindly refer to:
 
 - [Changelog](/docs/changelog/CHANGELOG-v0.md)
-- [Improvements wishlist doc](/docs/improvements-wishlist.md)
+- [Improvements wishlist](/docs/improvements-wishlist.md)
 - [Known issues](/docs/known-issues.md)
 
 To build or run the application from source, refer to:
@@ -15,19 +15,19 @@ To build or run the application from source, refer to:
 - [Running the application in development from source](#running-the-application-in-development-from-source)
 - [Building the application](#building-the-application)
 
-## Features as of latest v0.1.0
-
-- [x] Base calculator with working numpad input and display.
-
-## Planned updates for v0.2.0-dev
+## Add features as of latest v0.2.0-dev
 
 - [ ] Working functionality for the 4 basic math operations computed on chromium front-end only
 - [x] Respond to keyboard inputs.
 - [ ] Honor text cursor placement:
-  - [ ] Navigate the cursor position via the `<` and `>` key pad grid buttons.
+  - [x] Navigate the cursor position via the `<` and `>` key pad grid buttons.
   - [x] `Backspace` (Delete on Mac) - delete character on the left of the cursor
   - [x] `Delete` - delete character on the right of the cursor
   - [ ] `0-9` keys - number values get inserted at the text cursor position.
+
+## Planned updates for v0.3.0-dev
+
+- [ ] UI Styling mimicking [neobrutalism](https://www.neobrutalism.dev/)
 
 ## Running the application in development from source:
 
