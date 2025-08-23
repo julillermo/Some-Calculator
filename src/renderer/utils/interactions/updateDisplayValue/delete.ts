@@ -5,12 +5,12 @@ type GetDeleteUpdatedDisplayValueProps = {
   displayValueString: DisplayValueString;
   selectionOptions: {
     isDisplayScreenFocused: boolean;
-    selectionValue: number | undefined;
+    selectionValue: number | null;
   };
 };
 type GetDeleteUpdatedDisplayValueRes = {
   updatedDisplayValueString: DisplayValueString;
-  updatedTextCursorSelectionPosition: number | undefined;
+  updatedTextCursorSelectionPosition: number | null;
 };
 export function getDeleteUpdatedDisplayValue({
   displayValueString,
@@ -20,7 +20,7 @@ export function getDeleteUpdatedDisplayValue({
   let updatedTextCursorSelectionPosition = selectionValue;
 
   if (isDisplayScreenFocused) {
-    if (selectionValue !== undefined) {
+    if (selectionValue !== null) {
       updatedDisplayValueString = removeCharByIndex(
         displayValueString,
         selectionValue + 1

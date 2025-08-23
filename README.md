@@ -17,13 +17,24 @@ To build or run the application from source, refer to:
 
 ## Added features as of latest v0.2.0
 
-- [ ] Working functionality for the 4 basic math operations computed on chromium front-end only
+- [x] Working functionality for the 4 basic math operations computed on chromium front-end only
 - [x] Respond to keyboard inputs.
+  - `0-9` input number values (both keyboard number pad and top row of keyboard)
+  - `Backspace` (delete on Mac) - backward delete
+  - `Delete` - forward delete
+  - `c` - clear the display
+  - `+` for add
+  - `-` for subtract
+  - `*` for multiply
+  - `/` for divide
+  - `Enter` to evaluate expression (same action as the on-screen `=` button)
+  - `←` to move cursor leftward
+  - `→` to move cursor rightward
 - [x] Honor text cursor placement:
-  - [x] Navigate the cursor position via the `<` and `>` key pad grid buttons.
-  - [x] `Backspace` (Delete on Mac) - delete character on the left of the cursor
-  - [x] `Delete` - delete character on the right of the cursor
-  - [x] `0-9` keys - number values get inserted at the text cursor position.
+  - Navigate the cursor position via the `<` and `>` key pad grid buttons.
+  - `Backspace` (Delete on Mac) - delete character on the left of the cursor
+  - `Delete` - delete character on the right of the cursor
+  - `0-9` keys - number values get inserted at the text cursor position.
 
 ## Planned updates for v0.3.0
 
@@ -34,6 +45,11 @@ To build or run the application from source, refer to:
 ## Planned updates for v0.4.0
 
 - [ ] General development flow for packaging to Windows, Mac, and Linux. (prefer to distribute via [flathub](https://flathub.org/))
+- [ ] Make licenses of packages I've depended on accessible to the user
+  - [ ] Create a Node script to automatically list direct and indirect dependency licenses using `pnpm licenses list --json > licenses.json`. The script should then copy out all available licenses into a `licences` folder.
+  - [ ] Create a dedicated window for visually displaying the package licenses and making them accessible to the user.
+    - [ ] Likely have a table or an accordion list
+    - [ ] If I want to make the list searchable, I'd prefer to use SQLite \[[1](https://sqlite.org/index.html)] \[[2](https://www.delftstack.com/howto/sqlite/electron-sqlite/)] to facilitate the storage and search
 
 ## Running the application in development from source:
 

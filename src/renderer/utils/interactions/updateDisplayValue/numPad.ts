@@ -1,27 +1,25 @@
-import { DisplayValueString, isDisplayValueString } from '@renderer/types';
-import {
-  BASIC_NUMBER_PAD_LABELS,
-  MAX_DISPLAYED_DIGIT
-} from '@renderer/utils/constants';
+import { BasicOperationsCharacters, DisplayValueString } from '@renderer/types';
+import { MAX_DISPLAYED_DIGIT } from '@renderer/utils/constants';
+import { isDisplayValueString } from '@renderer/utils/types';
 
 import {
   appendToDisplayValue,
-  insertInDisplayValue,
-  removeChar
+  countDigitsInString,
+  insertInDisplayValue
 } from '@renderer/utils/string';
 import { checkStringForDecimal } from '@renderer/utils/string/checkString';
 
 type GetNumPadUpdatedDispalyValueProps = {
-  numpadInput: (typeof BASIC_NUMBER_PAD_LABELS)[number];
+  numpadInput: BasicOperationsCharacters;
   displayValueString: DisplayValueString;
   selectionOptions: {
     isDisplayScreenFocused: boolean;
-    selectionValue: number | undefined;
+    selectionValue: number | null;
   };
 };
 type GetNumPadUpdatedDispalyValueRes = {
   updatedDisplayValueString: DisplayValueString;
-  updatedTextCursorSelectionPosition: number | undefined;
+  updatedTextCursorSelectionPosition: number | null;
 };
 export function getNumPadUpdatedDispalyValue({
   numpadInput,
@@ -30,17 +28,14 @@ export function getNumPadUpdatedDispalyValue({
 }: GetNumPadUpdatedDispalyValueProps): GetNumPadUpdatedDispalyValueRes {
   const firstActiveValueDigit = displayValueString;
   const activeValueHasDecimal = checkStringForDecimal(displayValueString);
-  const digitCount = removeChar(
-    removeChar(displayValueString, ','),
-    '.'
-  ).length;
+  const digitCount = countDigitsInString(displayValueString);
 
   let updatedDisplayValueString = displayValueString;
   let updatedTextCursorSelectionPosition = selectionValue;
 
-  if (isDisplayScreenFocused && selectionValue !== undefined) {
+  if (isDisplayScreenFocused && selectionValue !== null) {
     if (numpadInput === '=') {
-      // not yet implemented
+      // implementation located at the root of the applicaiton / function call
     } else if (numpadInput === '.') {
       if (!activeValueHasDecimal && digitCount < MAX_DISPLAYED_DIGIT) {
         const adjustedNumpadInput = selectionValue === 0 ? '0.' : '.';
@@ -59,10 +54,14 @@ export function getNumPadUpdatedDispalyValue({
         firstActiveValueDigit !== '0' &&
         selectionValue === 0
       ) {
-        updatedDisplayValueString = appendToDisplayValue(
-          displayValueString,
-          numpadInput
-        );
+        if (displayValueString.length === 0) {
+          updatedDisplayValueString = appendToDisplayValue(
+            displayValueString,
+            numpadInput
+          );
+        } else {
+          // do nothing
+        }
       } else {
         updatedDisplayValueString = insertInDisplayValue(
           displayValueString,
@@ -74,7 +73,7 @@ export function getNumPadUpdatedDispalyValue({
     }
   } else {
     if (numpadInput === '=') {
-      // not yet implemented
+      // implementation located at the root of the applicaiton / function call
     } else if (numpadInput === '.') {
       if (!activeValueHasDecimal && digitCount < MAX_DISPLAYED_DIGIT) {
         const adjustedNumpadInput = digitCount === 0 ? '0.' : '.';

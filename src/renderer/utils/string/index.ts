@@ -1,6 +1,7 @@
 export { checkStringForDecimal, checkStringLastChar } from './checkString';
 export {
   appendToDisplayValue,
+  convertNumericalToDisplayValue,
   formatDisplayValue,
   getDisplayAndNumericalValue,
   insertInDisplayValue

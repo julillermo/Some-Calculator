@@ -5,34 +5,54 @@ import {
 } from '@components/index';
 import { useEffect, useRef, useState } from 'react';
 import { calculatorLayout } from './App.css';
-import { DisplayValueString } from './types';
+import {
+  BasicOperationsCharacters,
+  DisplayValueString,
+  ExpressionPartsDisplayValueString,
+  ExpressionPartsValues
+} from './types';
+import { calculateExpression } from './utils/calculation';
 import {
   BASIC_NUMBER_PAD_LABELS,
+  BASIC_OPERATIONS_KEYBOARD_INPUT,
   MAX_DISPLAYED_DIGIT
 } from './utils/constants';
 import {
-  getNumPadUpdatedDispalyValue,
   getBackspaceUpdatedDisplayValue,
-  getDeleteUpdatedDisplayValue
+  getDeleteUpdatedDisplayValue,
+  getNumPadUpdatedDispalyValue
 } from './utils/interactions/updateDisplayValue';
 import {
+  clearOperationRef,
+  combineExpressionPartsDisplay,
   getBottomDisplayScreenDetails,
-  isElementFocused
+  isElementFocused,
+  prepareOperationRef
 } from './utils/sideEffects';
-import { getDisplayAndNumericalValue } from './utils/string';
-import { countDigitsInString } from './utils/string';
+import {
+  convertNumericalToDisplayValue,
+  countDigitsInString,
+  getDisplayAndNumericalValue
+} from './utils/string';
+import { mapKeyboardInputToOperation } from './utils/calculation/mapKeyboardInputToOperation';
 
 function App(): React.JSX.Element {
   // const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
 
   /* === State Values === */
+  const [expressionDisplayString, setExpressionDisplayString] = useState('');
   const [displayValueString, setDisplayValueString] =
     useState<DisplayValueString>('');
   const [forcedRenderCount, setForcedRenderCount] = useState(0);
   const [isDisplayScreenFocused, setIsDisplayScreenFocused] = useState(false);
 
   /* === Persistent Values === */
-  const numericalValue = useRef<number | null>(null);
+  const expressionPartsStringRefValue = useRef<
+    Partial<ExpressionPartsDisplayValueString>
+  >({});
+  const expressionPartsValueRefValue = useRef<Partial<ExpressionPartsValues>>(
+    {}
+  );
   const previousCommaCountValue = useRef<number>(0);
   const currentCommaCountValue = useRef<number>(0);
   const keyboardInputRefValue = useRef<string>(null);
@@ -46,7 +66,6 @@ function App(): React.JSX.Element {
     const btmDispScrRefCurrent = bottomDisplayScreenRef.current;
 
     const captureKeyPress = (event: KeyboardEvent): void => {
-      // console.log('event.key', event.key);
       keyboardInputRefValue.current = event.key;
       setForcedRenderCount((prev) => prev + 1);
     };
@@ -85,61 +104,24 @@ function App(): React.JSX.Element {
 
   function processKeyboardInputEffect(): void {
     const keyboardInputValue = keyboardInputRefValue.current;
-    const { selectionValue, isDisplayScreenFocused } =
-      getBottomDisplayScreenDetails(bottomDisplayScreenRef);
-
     if (keyboardInputValue) {
-      if (BASIC_NUMBER_PAD_LABELS.includes(keyboardInputValue)) {
-        const {
-          updatedDisplayValueString,
-          updatedTextCursorSelectionPosition
-        } = getNumPadUpdatedDispalyValue({
-          numpadInput: keyboardInputValue,
-          displayValueString,
-          selectionOptions: {
-            isDisplayScreenFocused,
-            selectionValue
-          }
-        });
-        handleFormattedDisplayChange(updatedDisplayValueString);
-        if (updatedTextCursorSelectionPosition !== undefined) {
-          textCursorSelectionPosRefValue.current =
-            updatedTextCursorSelectionPosition;
-        }
+      if (
+        BASIC_NUMBER_PAD_LABELS.includes(keyboardInputValue) ||
+        keyboardInputValue === 'Enter'
+      ) {
+        handleNumpadClick(keyboardInputValue);
       } else if (keyboardInputValue === 'Backspace') {
-        const {
-          updatedDisplayValueString,
-          updatedTextCursorSelectionPosition
-        } = getBackspaceUpdatedDisplayValue({
-          displayValueString,
-          selectionOptions: {
-            isDisplayScreenFocused,
-            selectionValue
-          }
-        });
-        handleFormattedDisplayChange(updatedDisplayValueString);
-        if (updatedTextCursorSelectionPosition !== undefined) {
-          textCursorSelectionPosRefValue.current =
-            updatedTextCursorSelectionPosition;
-        }
+        handleBackspace();
       } else if (keyboardInputValue === 'Delete') {
-        const {
-          updatedDisplayValueString,
-          updatedTextCursorSelectionPosition
-        } = getDeleteUpdatedDisplayValue({
-          displayValueString,
-          selectionOptions: {
-            isDisplayScreenFocused,
-            selectionValue
-          }
-        });
-        handleFormattedDisplayChange(updatedDisplayValueString);
-        if (updatedTextCursorSelectionPosition !== undefined) {
-          textCursorSelectionPosRefValue.current =
-            updatedTextCursorSelectionPosition;
-        }
+        handleDelete();
       } else if (keyboardInputValue.toLowerCase() === 'c') {
-        handleFormattedDisplayChange('');
+        handleClearCalculator();
+      } else if (BASIC_OPERATIONS_KEYBOARD_INPUT.includes(keyboardInputValue)) {
+        const equivalentOperationLabel =
+          mapKeyboardInputToOperation(keyboardInputValue);
+        if (equivalentOperationLabel !== null) {
+          handleMathOperationClick(equivalentOperationLabel);
+        }
       }
     }
   } // [forcedRenderCount]
@@ -167,11 +149,13 @@ function App(): React.JSX.Element {
         commaAccountedCursorPos = maxTextCursorPosition;
       }
 
+      textCursorSelectionPosRefValue.current = commaAccountedCursorPos;
       bottomDisplayScreenRef.current?.setSelectionRange(
         commaAccountedCursorPos,
         commaAccountedCursorPos
       );
       previousCommaCountValue.current = currentCommaCountValue.current;
+      bottomDisplayScreenRef.current?.focus();
     }
   } // [displayValue]
 
@@ -190,10 +174,167 @@ function App(): React.JSX.Element {
       getDisplayAndNumericalValue(displayValue);
     if (displayedDigitCount <= MAX_DISPLAYED_DIGIT) {
       setDisplayValueString(formattedDisplayValue);
-      numericalValue.current = calcualtedNumValue;
       currentCommaCountValue.current =
         formattedDisplayValue.match(/,/g)?.length ?? 0;
+
+      prepareOperationRef<ExpressionPartsDisplayValueString>({
+        currentValue: formattedDisplayValue,
+        expressionPartsRef: expressionPartsStringRefValue
+      });
+      prepareOperationRef<ExpressionPartsValues>({
+        currentValue: calcualtedNumValue,
+        expressionPartsRef: expressionPartsValueRefValue
+      });
+
+      setExpressionDisplayString(
+        combineExpressionPartsDisplay(expressionPartsStringRefValue)
+      );
     }
+  };
+  const handleBackspace = (): void => {
+    const { selectionValue } = getBottomDisplayScreenDetails(
+      bottomDisplayScreenRef
+    );
+    const { updatedDisplayValueString, updatedTextCursorSelectionPosition } =
+      getBackspaceUpdatedDisplayValue({
+        displayValueString,
+        selectionOptions: {
+          isDisplayScreenFocused,
+          selectionValue
+        }
+      });
+
+    handleFormattedDisplayChange(updatedDisplayValueString);
+    if (updatedTextCursorSelectionPosition !== undefined) {
+      textCursorSelectionPosRefValue.current =
+        updatedTextCursorSelectionPosition;
+      bottomDisplayScreenRef.current?.focus();
+    }
+  };
+  const handleDelete = (): void => {
+    const { selectionValue } = getBottomDisplayScreenDetails(
+      bottomDisplayScreenRef
+    );
+    const { updatedDisplayValueString, updatedTextCursorSelectionPosition } =
+      getDeleteUpdatedDisplayValue({
+        displayValueString,
+        selectionOptions: {
+          isDisplayScreenFocused,
+          selectionValue
+        }
+      });
+    handleFormattedDisplayChange(updatedDisplayValueString);
+    if (updatedTextCursorSelectionPosition !== undefined) {
+      textCursorSelectionPosRefValue.current =
+        updatedTextCursorSelectionPosition;
+      bottomDisplayScreenRef.current?.focus();
+    }
+  };
+  const handleMovetextCursor = (moveStep: number): void => {
+    const displayValueStringLength = displayValueString.length;
+    const selectionValue = textCursorSelectionPosRefValue.current;
+    const cursorAtFarthestLeft = selectionValue === 0;
+    const cursorAtFarthestRight = selectionValue === displayValueStringLength;
+
+    if (selectionValue === null) {
+      textCursorSelectionPosRefValue.current = displayValueStringLength;
+      bottomDisplayScreenRef.current?.setSelectionRange(
+        displayValueStringLength,
+        displayValueStringLength
+      );
+    } else {
+      const cursorIsWithinBounds =
+        selectionValue >= 0 && selectionValue <= displayValueStringLength;
+      if (cursorIsWithinBounds) {
+        let adjustedMoveStep = moveStep;
+        if (cursorAtFarthestLeft && moveStep < 0) {
+          adjustedMoveStep = 0;
+        } else if (cursorAtFarthestRight && moveStep > 0) {
+          adjustedMoveStep = 0;
+        }
+        const adjustedSelectionValue = selectionValue + adjustedMoveStep;
+
+        textCursorSelectionPosRefValue.current = adjustedSelectionValue;
+        bottomDisplayScreenRef.current?.setSelectionRange(
+          adjustedSelectionValue,
+          adjustedSelectionValue
+        );
+      }
+    }
+
+    bottomDisplayScreenRef.current?.focus();
+    setIsDisplayScreenFocused(true);
+  };
+  const handleNumpadClick = (numpadInput: string): void => {
+    const selectionValue = textCursorSelectionPosRefValue.current;
+    if (numpadInput === '=' || numpadInput === 'Enter') {
+      const calculatedValue = calculateExpression({
+        firstOperand: expressionPartsValueRefValue.current.firstOperand,
+        secondOperand: expressionPartsValueRefValue.current.secondOperand,
+        operation: expressionPartsValueRefValue.current.operation
+      });
+      if (calculatedValue !== null) {
+        const displayValueConverted =
+          convertNumericalToDisplayValue(calculatedValue);
+
+        setExpressionDisplayString(displayValueConverted);
+        setDisplayValueString(displayValueConverted);
+
+        clearOperationRef(expressionPartsStringRefValue);
+        clearOperationRef(expressionPartsValueRefValue);
+
+        prepareOperationRef<ExpressionPartsDisplayValueString>({
+          currentValue: displayValueConverted,
+          expressionPartsRef: expressionPartsStringRefValue
+        });
+        prepareOperationRef<ExpressionPartsValues>({
+          currentValue: calculatedValue,
+          expressionPartsRef: expressionPartsValueRefValue
+        });
+      }
+    } else {
+      const { updatedDisplayValueString, updatedTextCursorSelectionPosition } =
+        getNumPadUpdatedDispalyValue({
+          numpadInput,
+          displayValueString,
+          selectionOptions: {
+            isDisplayScreenFocused,
+            selectionValue
+          }
+        });
+      handleFormattedDisplayChange(updatedDisplayValueString);
+      if (updatedTextCursorSelectionPosition !== undefined) {
+        textCursorSelectionPosRefValue.current =
+          updatedTextCursorSelectionPosition;
+      }
+    }
+  };
+  const handleMathOperationClick = (
+    operationLabel: BasicOperationsCharacters
+  ): void => {
+    const currentOperationString =
+      expressionPartsStringRefValue.current.operation;
+    const currentOperationValue =
+      expressionPartsValueRefValue.current.operation;
+    if (
+      currentOperationString === undefined &&
+      currentOperationValue === undefined
+    ) {
+      expressionPartsStringRefValue.current.operation = operationLabel;
+      expressionPartsValueRefValue.current.operation = operationLabel;
+      setExpressionDisplayString(
+        combineExpressionPartsDisplay(expressionPartsStringRefValue)
+      );
+      setDisplayValueString('');
+    }
+  };
+  const handleClearCalculator = (): void => {
+    clearOperationRef(expressionPartsStringRefValue);
+    clearOperationRef(expressionPartsValueRefValue);
+    setExpressionDisplayString(
+      combineExpressionPartsDisplay(expressionPartsStringRefValue)
+    );
+    setDisplayValueString('');
   };
 
   return (
@@ -201,18 +342,17 @@ function App(): React.JSX.Element {
       <AppContainer>
         <div className={calculatorLayout}>
           <DisplayScreen
-            topScreenValue={displayValueString}
+            topScreenValue={expressionDisplayString}
             bottomScreenValue={displayValueString}
             height={`150px`}
             bottomScreenRef={bottomDisplayScreenRef}
           />
           <BasicKeypadGrid
-            displayValueString={displayValueString}
-            textCursorSelectionPosRefValue={textCursorSelectionPosRefValue}
-            bottomScreenRef={bottomDisplayScreenRef}
-            isDisplayScreenFocused={isDisplayScreenFocused}
-            setIsDisplayScreenFocused={setIsDisplayScreenFocused}
-            onDisplayValueChange={handleFormattedDisplayChange}
+            onBackspace={handleBackspace}
+            onMoveTextCursor={handleMovetextCursor}
+            onNumpadClick={handleNumpadClick}
+            onMathOperationClick={handleMathOperationClick}
+            onClearCalculator={handleClearCalculator}
           />
         </div>
       </AppContainer>

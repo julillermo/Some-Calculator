@@ -1,13 +1,13 @@
 import { isElementFocused } from './htmlElement';
 
 type GetBottomDisplayScreenDetailsRes = {
-  selectionValue: number | undefined;
+  selectionValue: number | null;
   isDisplayScreenFocused: boolean;
 };
 export function getBottomDisplayScreenDetails(
   bottomDisplayScreenRef: React.RefObject<HTMLTextAreaElement | null>
 ): GetBottomDisplayScreenDetailsRes {
-  const selectionValue = bottomDisplayScreenRef.current?.selectionStart;
+  const selectionValue = bottomDisplayScreenRef.current?.selectionStart ?? null;
   const isDisplayScreenFocused = isElementFocused(
     bottomDisplayScreenRef.current
   );

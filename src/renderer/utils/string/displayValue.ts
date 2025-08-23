@@ -29,6 +29,12 @@ export function formatDisplayValue(inputString: string): DisplayValueString {
   ) as DisplayValueString;
 }
 
+export function convertNumericalToDisplayValue(
+  numericalValue: number
+): DisplayValueString {
+  return formatDisplayValue(`${numericalValue}`);
+}
+
 export function getDisplayAndNumericalValue(displayValue: DisplayValueString): {
   formattedDisplayValue: DisplayValueString;
   numericalValue: number | null;

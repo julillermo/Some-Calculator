@@ -1,16 +1,16 @@
 import { DisplayValueString } from '@renderer/types';
-import { removeLastChar, removeCharByIndex } from '@renderer/utils/string';
+import { removeCharByIndex, removeLastChar } from '@renderer/utils/string';
 
 type GetBackspaceUpdatedDisplayValueProps = {
   displayValueString: DisplayValueString;
   selectionOptions: {
     isDisplayScreenFocused: boolean;
-    selectionValue: number | undefined;
+    selectionValue: number | null;
   };
 };
 type GetBackspaceUpdatedDisplayValueRes = {
   updatedDisplayValueString: DisplayValueString;
-  updatedTextCursorSelectionPosition: number | undefined;
+  updatedTextCursorSelectionPosition: number | null;
 };
 export function getBackspaceUpdatedDisplayValue({
   displayValueString,
@@ -21,7 +21,7 @@ export function getBackspaceUpdatedDisplayValue({
   const textCursorAdjustment = selectionValue === 0 ? 0 : -1;
 
   if (isDisplayScreenFocused) {
-    if (selectionValue !== undefined) {
+    if (selectionValue != null) {
       updatedDisplayValueString = removeCharByIndex(
         displayValueString,
         selectionValue
