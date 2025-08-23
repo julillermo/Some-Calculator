@@ -1,0 +1,154 @@
+/* @import '/home/tuliog/Documents/Workspace/Some-Calculator/node_modules/open-color/open-color.css'; */
+@import '@open-color/open-color.css';
+
+/* 
+  gray, red, pink, grape,
+  violet, indigo, blue,
+  cyan, teal, green,
+  lime, yellow, orange
+*/
+
+#root {
+  --gray-0: var(--oc-gray-0);
+  --gray-1: var(--oc-gray-1);
+  --gray-2: var(--oc-gray-2);
+  --gray-3: var(--oc-gray-3);
+  --gray-4: var(--oc-gray-4);
+  --gray-5: var(--oc-gray-5);
+  --gray-6: var(--oc-gray-6);
+  --gray-7: var(--oc-gray-7);
+  --gray-8: var(--oc-gray-8);
+  --gray-9: var(--oc-gray-9);
+
+  --red-0: var(--oc-red-0);
+  --red-1: var(--oc-red-1);
+  --red-2: var(--oc-red-2);
+  --red-3: var(--oc-red-3);
+  --red-4: var(--oc-red-4);
+  --red-5: var(--oc-red-5);
+  --red-6: var(--oc-red-6);
+  --red-7: var(--oc-red-7);
+  --red-8: var(--oc-red-8);
+  --red-9: var(--oc-red-9);
+
+  --pink-0: var(--oc-pink-0);
+  --pink-1: var(--oc-pink-1);
+  --pink-2: var(--oc-pink-2);
+  --pink-3: var(--oc-pink-3);
+  --pink-4: var(--oc-pink-4);
+  --pink-5: var(--oc-pink-5);
+  --pink-6: var(--oc-pink-6);
+  --pink-7: var(--oc-pink-7);
+  --pink-8: var(--oc-pink-8);
+  --pink-9: var(--oc-pink-9);
+
+  --grape-0: var(--oc-grape-0);
+  --grape-1: var(--oc-grape-1);
+  --grape-2: var(--oc-grape-2);
+  --grape-3: var(--oc-grape-3);
+  --grape-4: var(--oc-grape-4);
+  --grape-5: var(--oc-grape-5);
+  --grape-6: var(--oc-grape-6);
+  --grape-7: var(--oc-grape-7);
+  --grape-8: var(--oc-grape-8);
+  --grape-9: var(--oc-grape-9);
+
+  --violet-0: var(--oc-violet-0);
+  --violet-1: var(--oc-violet-1);
+  --violet-2: var(--oc-violet-2);
+  --violet-3: var(--oc-violet-3);
+  --violet-4: var(--oc-violet-4);
+  --violet-5: var(--oc-violet-5);
+  --violet-6: var(--oc-violet-6);
+  --violet-7: var(--oc-violet-7);
+  --violet-8: var(--oc-violet-8);
+  --violet-9: var(--oc-violet-9);
+
+  --indigo-0: var(--oc-indigo-0);
+  --indigo-1: var(--oc-indigo-1);
+  --indigo-2: var(--oc-indigo-2);
+  --indigo-3: var(--oc-indigo-3);
+  --indigo-4: var(--oc-indigo-4);
+  --indigo-5: var(--oc-indigo-5);
+  --indigo-6: var(--oc-indigo-6);
+  --indigo-7: var(--oc-indigo-7);
+  --indigo-8: var(--oc-indigo-8);
+  --indigo-9: var(--oc-indigo-9);
+
+  --blue-0: var(--oc-blue-0);
+  --blue-1: var(--oc-blue-1);
+  --blue-2: var(--oc-blue-2);
+  --blue-3: var(--oc-blue-3);
+  --blue-4: var(--oc-blue-4);
+  --blue-5: var(--oc-blue-5);
+  --blue-6: var(--oc-blue-6);
+  --blue-7: var(--oc-blue-7);
+  --blue-8: var(--oc-blue-8);
+  --blue-9: var(--oc-blue-9);
+
+  --cyan-0: var(--oc-cyan-0);
+  --cyan-1: var(--oc-cyan-1);
+  --cyan-2: var(--oc-cyan-2);
+  --cyan-3: var(--oc-cyan-3);
+  --cyan-4: var(--oc-cyan-4);
+  --cyan-5: var(--oc-cyan-5);
+  --cyan-6: var(--oc-cyan-6);
+  --cyan-7: var(--oc-cyan-7);
+  --cyan-8: var(--oc-cyan-8);
+  --cyan-9: var(--oc-cyan-9);
+
+  --teal-0: var(--oc-teal-0);
+  --teal-1: var(--oc-teal-1);
+  --teal-2: var(--oc-teal-2);
+  --teal-3: var(--oc-teal-3);
+  --teal-4: var(--oc-teal-4);
+  --teal-5: var(--oc-teal-5);
+  --teal-6: var(--oc-teal-6);
+  --teal-7: var(--oc-teal-7);
+  --teal-8: var(--oc-teal-8);
+  --teal-9: var(--oc-teal-9);
+
+  --green-0: var(--oc-green-0);
+  --green-1: var(--oc-green-1);
+  --green-2: var(--oc-green-2);
+  --green-3: var(--oc-green-3);
+  --green-4: var(--oc-green-4);
+  --green-5: var(--oc-green-5);
+  --green-6: var(--oc-green-6);
+  --green-7: var(--oc-green-7);
+  --green-8: var(--oc-green-8);
+  --green-9: var(--oc-green-9);
+
+  --lime-0: var(--oc-lime-0);
+  --lime-1: var(--oc-lime-1);
+  --lime-2: var(--oc-lime-2);
+  --lime-3: var(--oc-lime-3);
+  --lime-4: var(--oc-lime-4);
+  --lime-5: var(--oc-lime-5);
+  --lime-6: var(--oc-lime-6);
+  --lime-7: var(--oc-lime-7);
+  --lime-8: var(--oc-lime-8);
+  --lime-9: var(--oc-lime-9);
+
+  --yellow-0: var(--oc-yellow-0);
+  --yellow-1: var(--oc-yellow-1);
+  --yellow-2: var(--oc-yellow-2);
+  --yellow-3: var(--oc-yellow-3);
+  --yellow-4: var(--oc-yellow-4);
+  --yellow-5: var(--oc-yellow-5);
+  --yellow-6: var(--oc-yellow-6);
+  --yellow-7: var(--oc-yellow-7);
+  --yellow-8: var(--oc-yellow-8);
+  --yellow-9: var(--oc-yellow-9);
+
+  --orange-0: var(--oc-orange-0);
+  --orange-1: var(--oc-orange-1);
+  --orange-2: var(--oc-orange-2);
+  --orange-3: var(--oc-orange-3);
+  --orange-4: var(--oc-orange-4);
+  --orange-5: var(--oc-orange-5);
+  --orange-6: var(--oc-orange-6);
+  --orange-7: var(--oc-orange-7);
+  --orange-8: var(--oc-orange-8);
+  --orange-9: var(--oc-orange-9);
+}

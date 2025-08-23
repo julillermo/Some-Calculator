@@ -1,6 +1,7 @@
-import { resolve } from 'path'
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
-import react from '@vitejs/plugin-react'
+import { resolve } from 'path';
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
+import react from '@vitejs/plugin-react';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 
 export default defineConfig({
   main: {
@@ -12,12 +13,14 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        '@renderer': resolve('src/renderer'),
+        '@components': resolve('src/renderer/components'),
+        '@open-color': resolve('node_modules/open-color')
       }
     },
     server: {
       port: 63210
     },
-    plugins: [react()]
+    plugins: [react(), vanillaExtractPlugin()]
   }
-})
+});
