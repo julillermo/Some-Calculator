@@ -9,31 +9,36 @@ export function combineExpressionPartsDisplay(
     Partial<ExpressionPartsDisplayValueString>
   >
 ): string {
-  const firtOperandDisplay = expressionPartsRef.current.firstOperand ?? '';
-  const operationDisplay = expressionPartsRef.current.operation ?? '';
-  const secondOperandDisplay = expressionPartsRef.current.secondOperand ?? '';
+  const {
+    firstOperand = '',
+    operation = '',
+    secondOperand = ''
+  } = expressionPartsRef.current;
 
-  return firtOperandDisplay + operationDisplay + secondOperandDisplay;
+  return firstOperand + operation + secondOperand;
 }
 
-type PrepareOparationTypeProps<T> = {
+type PrepareOperationTypeProps<T> = {
   currentValue?: DisplayValueString | number | null;
   expressionPartsRef: React.RefObject<Partial<T>>;
 };
+
 export function prepareOperationRef<
   T extends ExpressionPartsDisplayValueString | ExpressionPartsValues
->({ currentValue, expressionPartsRef }: PrepareOparationTypeProps<T>): void {
-  if (expressionPartsRef.current.operation === undefined) {
-    expressionPartsRef.current.firstOperand = currentValue ?? undefined;
+>({ currentValue, expressionPartsRef }: PrepareOperationTypeProps<T>): void {
+  const current = expressionPartsRef.current;
+  if (current.operation === undefined) {
+    current.firstOperand = currentValue ?? undefined;
   } else {
-    expressionPartsRef.current.secondOperand = currentValue ?? undefined;
+    current.secondOperand = currentValue ?? undefined;
   }
 }
 
 export function clearOperationRef<
   T extends ExpressionPartsDisplayValueString | ExpressionPartsValues
 >(expressionPartsRef: React.RefObject<Partial<T>>): void {
-  expressionPartsRef.current.firstOperand = undefined;
-  expressionPartsRef.current.secondOperand = undefined;
-  expressionPartsRef.current.operation = undefined;
+  const current = expressionPartsRef.current;
+  current.firstOperand = undefined;
+  current.secondOperand = undefined;
+  current.operation = undefined;
 }
